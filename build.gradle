@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.5-SNAPSHOT'
+	id "java"
 	id 'maven-publish'
 }
 
@@ -16,13 +16,27 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	mavenLocal()
+	mavenCentral()
+	maven {
+		name = "nekoMavenReleases"
+		url = uri("https://maven.takeneko.icu/releases")
+	}
+	maven { url "https://maven.fabricmc.net/" }
 }
 
 dependencies {
-	// just grab any minecraft version to make fabric loom work
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	// fabric itself
+	compileOnly("net.fabricmc:fabric-loader:${project.loader_version}")
+	// fabric depedencies
+	compileOnly "org.ow2.asm:asm:${project.asm_version}"
+	compileOnly "org.ow2.asm:asm-analysis:${project.asm_version}"
+	compileOnly "org.ow2.asm:asm-commons:${project.asm_version}"
+	compileOnly "org.ow2.asm:asm-tree:${project.asm_version}"
+	compileOnly "org.ow2.asm:asm-util:${project.asm_version}"
+	compileOnly "net.fabricmc:sponge-mixin:${project.mixin_version}"
+	// mixin extras
+	compileOnly "io.github.llamalad7:mixinextras-fabric:$mixin_extras_version"
 
 	// put a velocity release jar into ./libs directory
 	compileOnly fileTree("./libs")
